@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    font-family: 'Poppins', 'sans-serif';
+    background-color: rgb(10, 24, 40);
+    color: white;
+}
+
+.background-color {
+    background-color: rgb(10, 24, 40);
+}
+
+.turquoise {
+    color: rgb(23, 133, 130);
+}
+
+.background-turquoise {
+    background-color: rgb(23, 133, 130);
+}
+
+.gold {
+    color: rgb(191, 161, 129);
+}
+
+.background-gold {
+    background-color: rgb(191, 161, 129);
+}
