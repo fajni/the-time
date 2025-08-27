@@ -1,3 +1,9 @@
 # real-time-app
 
 Realtime Database Firebase
+
+## How the app works
+
+- localstorage as login ....
+- hosting...
+- ...

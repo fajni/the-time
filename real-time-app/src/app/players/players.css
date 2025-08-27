@@ -1,0 +1,81 @@
+h1 {
+    font-size: xx-large;
+    color: #00ffc3;
+    text-shadow: 2px 2px #7a00ff, 4px 4px #ff3d67;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: default;
+}
+
+.grid {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    aspect-ratio: 4 / 3;
+    box-shadow: 0 6px 18px rgba(17, 17, 17, 0.8);
+    cursor: pointer;
+}
+
+.card:hover {
+    border: 2px solid rgb(255, 0, 200);
+    color: purple;
+}
+
+.card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.32) 60%);
+    pointer-events: none;
+}
+
+.title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.48);
+    color: #fff;
+    text-align: center;
+    font-size: clamp(1rem, 2.6vw, 1.25rem);
+    font-weight: 600;
+    max-width: 85%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.card a {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* single column on small screens */
+@media (max-width: 700px) {
+    .grid {
+        grid-template-columns: 1fr;
+        max-width: 220px;
+    }
+}

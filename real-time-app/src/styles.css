@@ -3,6 +3,7 @@
 * {
     font-family: 'Poppins', 'sans-serif';
     background-color: rgb(10, 24, 40);
+    /* background: linear-gradient(135deg, #0d1b4c, #6a0dad); */
     color: white;
 }
 
@@ -24,4 +25,20 @@
 
 .background-gold {
     background-color: rgb(191, 161, 129);
+}
+
+.zoom {
+    transition: transform .5s;
+}
+
+.zoom:hover {
+    transform: scale(1.1);
+}
+
+.rotate {
+    transition: transform .5s;
+}
+
+.rotate:hover {
+    transform: rotate(10deg);
 }
