@@ -1,11 +1,16 @@
 h1 {
     font-size: xx-large;
-    color: #00ffc3;
-    text-shadow: 2px 2px #7a00ff, 4px 4px #ff3d67;
     letter-spacing: 2px;
+    max-width: 400px;
+    margin: 20px auto;
     text-transform: uppercase;
     text-align: center;
     cursor: default;
+}
+
+p {
+    margin-top: 40px;
+    text-align: center;
 }
 
 .grid {

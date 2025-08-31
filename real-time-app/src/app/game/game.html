@@ -1,6 +1,39 @@
 
-@if(playerLoggedIn) {
-    <p>game works!</p>
+@if(isPlayerLoggedIn()) {
+
+    @if(startGame) {
+        
+        <h1 class="center colorful">Your numbers are: <b>{{currentPlayer.numbers}}</b></h1>
+        
+        @if(countdown <= 0) {
+            
+            <app-start-game [player]="currentPlayer" />
+        }
+        @if(countdown > 0) {
+
+
+            <div class="center zoom-effect">
+                <h1 class="colorful">Game starts in</h1>
+                <p class="game-text">{{countdown}}</p>
+            </div>
+        }
+
+
+    }
+    @else {
+        <h1 class="center colorful">NOT ALL PLAYERS ARE LOGGED IN</h1>
+        
+        <p class="center"><i>(The game requires all players be online; logged in!)</i></p>
+
+        <div class="border zoom-effect">
+            <h3 class="center colorful">Waiting for:</h3>
+            @for(offlinePlayer of notLoggedInPlayers; track $index) {
+                <p class="game-text">{{offlinePlayer.title}}</p>
+                <br/>
+            }
+        </div>
+    }
+
 }
 @else {
     <p>NOT LOGGED IN!</p>

@@ -1,13 +1,12 @@
 
-@if (message != "") {
-    <h1>{{message}}</h1>
-}
-@else {
-    <h1 class="rotate">Choose you player: </h1>
+@if(players.length > 1) {
+    <h1 class="rotate colorful">Choose you player: </h1>
+
     <main class="grid">
+        
 
         @for (player of players; track $index) {
-            
+        
             @if(player.loggedIn == false){
                 <article class="card zoom" (click)="logIn(player.id)">
 
@@ -17,6 +16,17 @@
                 </article>
             }
         }
+        
 
     </main>
 }
+@else {
+    <h1 class="zoom-effect colorful" style="max-width: 600px; margin: 40px auto;">NOT ENOUGH PLAYERS!</h1>
+}
+
+<p>
+    Check 
+    <a routerLink="/about" class="colorful">About</a> 
+    page for more...
+</p>
+

@@ -30,14 +30,14 @@ export class BrowserService {
 
     public setBrowserId(playerId: number) {
 
-        this.loggedIn$.next(true);
         localStorage.setItem('playerId', playerId.toString());
+        this.loggedIn$.next(true);
     }
 
     public deleteBrowserId() {
 
-        this.loggedIn$.next(false);
         localStorage.removeItem('playerId');
+        this.loggedIn$.next(false);
     }
 
 }

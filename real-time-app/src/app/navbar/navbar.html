@@ -5,18 +5,18 @@
         <i class="fas fa-bars"></i>
     </label>
 
-    <label class="logo rotate">THE MIND</label>
+    <label class="logo rotate">THE TIME</label>
     <ul>
 
         @if(!playerLoggedIn) {
-            <li><a routerLink="/">Home/Players</a></li>
+            <li><a routerLink="/players" routerLinkActive="colorful">Home/Players</a></li>
         }
         
-        <li><a routerLink="/about">About</a></li>
+        <li><a routerLink="/about" routerLinkActive="colorful">About</a></li>
 
         @if(playerLoggedIn) {
-            <li><a routerLink="/game">Game</a></li>
-            <li><a>Player</a></li>
+            <li><a routerLink="/game" class="colorful" routerLinkActive="colorful">Game</a></li>
+            <li><a routerLink="/player" routerLinkActive="colorful">{{currentPlayer!.title}}</a></li>
             <li><a (click)="logout()">Logout</a></li>
         }
         

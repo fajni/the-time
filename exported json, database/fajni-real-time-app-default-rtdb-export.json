@@ -1,0 +1,24 @@
+{
+  "players": {
+    "player1": {
+      "id": 1,
+      "loggedIn": false,
+      "title": "Player1"
+    },
+    "player2": {
+      "id": 2,
+      "loggedIn": false,
+      "title": "Player2"
+    },
+    "player3": {
+      "id": 3,
+      "loggedIn": false,
+      "title": "Player3"
+    },
+    "player4": {
+      "id": 4,
+      "loggedIn": false,
+      "title": "Player4"
+    }
+  }
+}

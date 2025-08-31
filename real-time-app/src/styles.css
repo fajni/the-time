@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
 * {
     font-family: 'Poppins', 'sans-serif';
@@ -31,8 +32,23 @@
     transition: transform .5s;
 }
 
+.red {
+    color: red;
+    text-shadow: 2px 2px 0 black, 4px 4px 0 rgba(255, 0, 0, 0.5);
+}
+
 .zoom:hover {
     transform: scale(1.1);
+}
+
+.zoom-effect {
+  animation: pulseZoom 2s infinite ease-in-out;
+}
+
+@keyframes pulseZoom {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 .rotate {
@@ -41,4 +57,9 @@
 
 .rotate:hover {
     transform: rotate(10deg);
+}
+
+.colorful {
+    color: #00ffc3;
+    text-shadow: 2px 2px #7a00ff, 4px 4px #ff3d67;
 }

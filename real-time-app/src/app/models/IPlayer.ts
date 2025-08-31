@@ -4,5 +4,7 @@ export interface IPlayer {
     loggedIn: boolean;
     title: string;
 
+    numbers?: number[];
+
     image?: string;
 }

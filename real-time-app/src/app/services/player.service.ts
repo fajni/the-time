@@ -1,8 +1,8 @@
 import { inject, Injectable } from "@angular/core";
-import { child, Database, get, onValue, ref, update } from "@angular/fire/database";
+import { child, Database, get, onValue, ref, set, update } from "@angular/fire/database";
 import { Observable } from "rxjs";
 import { IPlayer } from "../models/IPlayer";
-import { loggedIn } from "@angular/fire/auth-guard";
+import { numbers } from "../../assets/data/numbers";
 
 @Injectable({ providedIn: 'root' })
 export class PlayerService {
@@ -42,7 +42,7 @@ export class PlayerService {
     }
 
 
-    public async getPlayers2(): Promise<IPlayer[]> {
+    public async getPlayers(): Promise<IPlayer[]> {
 
         try {
 
@@ -102,6 +102,31 @@ export class PlayerService {
 
     public isPlayerLoggedIn(id: number) {
         throw new Error("NOT IMPLEMENTED isPlayerLoggedIn! - player.service.ts");
+    }
+
+    public async setNumbersForPlayer(id: number, numbers: number[]) {
+
+        const player = ref(this.db, `players/player${id}`);
+
+        if(player != null) {
+            await update(player, { numbers: numbers });
+        }
+    }
+
+    public async deleteNumberForPlayer(id: number, number: number) {
+
+        const playerRef = ref(this.db, `players/player${id}/numbers`);
+        
+        const snapshot = await get(playerRef);
+
+        if(snapshot.exists()) {
+
+            const numbers: number[] = snapshot.val();
+            const updatedNumbers = numbers.filter(n => n !== number);
+
+            await set(playerRef, updatedNumbers);
+        }
+
     }
 
     public async setLoginForPlayer(id: number, value: boolean) {

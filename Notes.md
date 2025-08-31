@@ -7,6 +7,10 @@ Some of my notes during the development. Problems, solutions, hosting, deploying
     - [Components](#components)
     - [environments.ts](#how-to-create-the-environmentsts)
 - [Problems and solutions](#problems-and-solutions)
+    - [Player closes browser or web app](#player-closes-browser-or-web-app)
+    - [Navbar won't refresh when the player is logged in/out](#navbar-doesnt-refresh-when-logged-inout)
+    - [Other clients can see occupied player](#other-clients-can-see-occupied-player)
+    - [Can't send/change data while listening to the same node in realtime](#cant-sendchange-data-while-listening-to-the-same-node-in-realtime)
 - [Hosting](#hosting)
 
 
@@ -315,14 +319,14 @@ export class BrowserService {
 
     public setBrowserId(playerId: number) {
 
-        this.loggedIn$.next(true);
         localStorage.setItem('playerId', playerId.toString());
+        this.loggedIn$.next(true);
     }
 
     public deleteBrowserId() {
 
-        this.loggedIn$.next(false);
         localStorage.removeItem('playerId');
+        this.loggedIn$.next(false);
     }
 
 }
@@ -407,10 +411,49 @@ export class Navbar implements OnInit {
 </nav>
 ```
 
+#### PLAYERS
+
+When you click on player, do the login!
+
 ## Problems and solutions
 
-> [!WARNING]  
-> Main problem is when the player is logged in private window, then you can't delete the local storage.
+### Player closes browser or web app
+
+- Problem (delete localStorage and set loggedIn to false when the player closes the browser or the web app):
+
+- Solution:
+
+```ts
+export class App {
+
+  /*
+    THIS DECORATOR (@HostListener) IS CALLED EVERY TIME WHEN THE CLIENT CLOSES THE BROWSER OR THE WEB APP !
+
+    This decorator solves the problem if the client doesn't log out properly. When the client
+      just close the browser or the web app local storage is deleted.
+  */
+
+  private browserService = inject(BrowserService);
+  private playerService = inject(PlayerService);
+
+  @HostListener('window:beforeunload', ['$event'])
+  public unloadHandler(event: Event) {
+
+    const playerId = this.browserService.getBrowserId();
+
+    if(playerId) {
+        this.playerService.setLoginForPlayer(Number(playerId), false);
+        this.browserService.deleteBrowserId();
+    }
+
+  }
+
+}
+```
+
+<hr/>
+
+### NavBar doesn't refresh when logged in/out
 
 - Problem (navbar doesn't refresh after the player is logged in):
 
@@ -510,14 +553,14 @@ export class BrowserService {
 
     public setBrowserId(playerId: number) {
 
-        this.loggedIn$.next(true);
         localStorage.setItem('playerId', playerId.toString());
+        this.loggedIn$.next(true);
     }
 
     public deleteBrowserId() {
 
-        this.loggedIn$.next(false);
         localStorage.removeItem('playerId');
+        this.loggedIn$.next(false);
     }
 
 }
@@ -593,6 +636,8 @@ export class Navbar implements OnInit {
 ```
 
 <hr/>
+
+### Other clients can see occupied player
 
 - Problem (After the player2 is logged in, others who watch won't see that the player2 is occupied):
 
@@ -721,14 +766,14 @@ export class BrowserService {
 
     public setBrowserId(playerId: number) {
 
-        this.loggedIn$.next(true);
         localStorage.setItem('playerId', playerId.toString());
+        this.loggedIn$.next(true);
     }
 
     public deleteBrowserId() {
 
-        this.loggedIn$.next(false);
         localStorage.removeItem('playerId');
+        this.loggedIn$.next(false);
     }
 
 }
@@ -917,14 +962,14 @@ export class BrowserService {
 
     public setBrowserId(playerId: number) {
 
-        this.loggedIn$.next(true);
         localStorage.setItem('playerId', playerId.toString());
+        this.loggedIn$.next(true);
     }
 
     public deleteBrowserId() {
 
-        this.loggedIn$.next(false);
         localStorage.removeItem('playerId');
+        this.loggedIn$.next(false);
     }
 
 }
@@ -980,6 +1025,195 @@ export class Players implements OnInit {
     console.log(player);
 
   }
+
+}
+```
+
+### Can't send/change data while listening to the same node in realtime
+
+- Problem (Can't send data _setNumbersForPlayer()_ inside _listenPlayers()_ subscription):
+
+> [!NOTE]  
+> _listenPlayers()_ emits snapshot every time when the database changes, 
+> and if you do the _update()_ in the same node - triggers new snapshot. <br/>
+> Problem: __INFINITE LOOP__ - Maximm call stack size exceeded.
+
+```ts
+@Injectable({ providedIn: 'root' })
+export class PlayerService {
+
+    private db = inject(Database);
+
+
+    // 🔥 realtime listener
+    public listenPlayers(): Observable<IPlayer[]> {
+
+        return new Observable<IPlayer[]>((subscriber) => {
+
+            const dbRef = ref(this.db, 'players');
+
+            const unsubscribe = onValue(dbRef, (snapshot) => {
+
+                if(snapshot.exists()) {
+                    const data = snapshot.val();
+
+                    const players = Object.values(data) as IPlayer[];
+
+                    for(let i = 0; i < players.length; i++) {
+                        players[i].image = `assets/img/player${i + 1}.png`;
+                    }
+
+                    subscriber.next(players);
+                }
+                else {
+                    subscriber.next([]);
+                }
+
+            });
+
+            // cleanup when unsubscribe
+            return () => unsubscribe();
+        });
+    }
+
+    public async setNumbersForPlayer(id: number, numbers: number[]) {
+
+        const player = ref(this.db, `players/player${id}`);
+
+        if(player != null) {
+            await update(player, { numbers: numbers })
+        }
+    }
+
+    public async setLoginForPlayer(id: number, value: boolean) {
+        
+        const player = ref(this.db, `players/player${id}`);
+
+        if(player != null) {
+            await update(player, { loggedIn: value });
+        }
+
+    }
+
+}
+```
+
+```ts
+@Component({
+  selector: 'app-game',
+  imports: [StartGame],
+  templateUrl: './game.html',
+  styleUrl: './game.css'
+})
+export class Game implements OnInit {
+
+  private browserService = inject(BrowserService);
+  private playerService = inject(PlayerService);
+  private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
+
+  public notLoggedInPlayers: IPlayer[] = [];
+  public loggedInPlayers: IPlayer[] = [];
+  public startGame: boolean = false;
+  public countdown: number = 5;
+
+  public getRandomInts(min: number, max: number, length: number): number[] {
+    return Array.from({ length }, () => Math.floor(Math.random() * (max - min + 1)) + min );
+  }
+
+  public isPlayerLoggedIn(): boolean {
+
+    var value: boolean = false;
+
+    const isLoggedInSubscription = this.browserService.isLoggedInObservable$.subscribe(loggedIn => {
+
+      if(loggedIn != null) {
+        value = true;
+      }
+      
+      else{
+        this.router.navigate(['/']);
+      }
+
+    });
+
+    this.destroyRef.onDestroy(() => {
+      isLoggedInSubscription.unsubscribe();
+    });
+
+    return value;
+  }
+
+  public ngOnInit() {
+    
+    // this.isPlayerLoggedIn();
+
+    const notAllLoggedInSubscription = this.playerService.listenPlayers().subscribe((response) => {
+
+      this.notLoggedInPlayers = [];
+      this.loggedInPlayers = [];
+      this.startGame = false;
+      this.countdown = 5;
+      
+      for(let i = 0; i < response.length; i++) {
+        
+        if(response[i].loggedIn == false) {
+          
+          this.notLoggedInPlayers.push(response[i]);
+        }
+
+        if(response[i].loggedIn == true) {
+          
+          this.loggedInPlayers.push(response[i]);
+          this.playerService.setNumbersForPlayer(response[i].id, randomNumbers); // PROBLEM!!!
+        }
+      }
+      
+      if(this.loggedInPlayers.length == response.length) {
+
+        this.startGame = true;
+
+        for(let i = this.countdown; i >= 0; i--) {
+          setTimeout(() => {
+            this.countdown = i;
+          }, (this.countdown - i) * 1000);
+        }
+
+      }
+
+    });
+
+    this.destroyRef.onDestroy(() => {
+      notAllLoggedInSubscription.unsubscribe();
+    });
+
+  }
+
+}
+```
+
+- Solution (Maybe set the numbers when the player is logged in (call method when the player is logged in) ):
+
+```ts
+
+public getRandomInts(min: number, max: number, length: number): number[] {
+    return Array.from({ length }, () => Math.floor(Math.random() * (max - min + 1)) + min );
+}
+
+public async logIn(id: number) {
+
+    const player = await this.playerService.getPlayerById(id);
+
+    if(player != null) {
+      player!.loggedIn = true;
+
+      this.browserService.setBrowserId(player.id);
+
+      this.playerService.setLoginForPlayer(player!.id, true);
+
+      const numbers = this.getRandomInts(0, 10, 3);
+      this.playerService.setNumbersForPlayer(player.id, numbers);
+    }
 
 }
 ```

@@ -1,0 +1,53 @@
+h1 {
+    margin: 60px auto;
+    text-align: center;
+    letter-spacing: 4px;
+    max-width: 700px;
+    border: 2px solid purple;
+    background-color: rgba(128, 0, 128, 0.4);
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.container {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    width: min(920px,95%);
+    margin: 24px auto;
+}
+
+
+.card {
+    flex: 1 1 140px;
+    min-width: 120px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(23, 133, 130);
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+    font-weight: 500;
+    font-size: clamp(28px, 6vw, 48px);
+    border: 2px solid white;
+}
+
+.card:hover {
+    border: 2px solid purple;
+    color: white;
+}
+
+.click {
+    cursor: pointer;
+}
+
+@media (max-width:520px) {
+    .container {
+        justify-content:center
+    }
+
+    .card {
+        height:110px
+    }
+}

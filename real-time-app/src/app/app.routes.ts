@@ -3,6 +3,7 @@ import { App } from './app';
 import { About } from './about/about';
 import { Players } from './players/players';
 import { Game } from './game/game';
+import { Player } from './players/player/player';
 
 export const routes: Routes = [
     {
@@ -13,6 +14,10 @@ export const routes: Routes = [
         path: '',
         redirectTo: 'players',
         pathMatch: 'full'
+    },
+    {
+        path: 'player',
+        component: Player
     },
     {
         path: 'game',

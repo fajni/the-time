@@ -1,0 +1,34 @@
+.center {
+    text-align: center;
+    margin: 10px auto;
+    max-width: 600px;
+}
+
+p, h3 {
+    background-color: transparent;
+}
+
+.border {
+    border: 2px solid purple;
+    background-color: rgba(0, 255, 234, 0.1);
+    border-radius: 20px;
+    max-width: 500px;
+    margin: 80px auto;
+}
+
+.game-text {
+    background-color: transparent;
+    margin: 0px;
+    font-size: 2rem;
+    text-decoration: underline;
+    font-weight: bold;
+    color: #00ffea;
+    text-align: center;
+
+    /* glow */
+    text-shadow: 
+        0 0 1px #00ffea,
+        0 0 11px #00ffea,
+        0 0 12px purple,
+        0 0 4px black;
+}

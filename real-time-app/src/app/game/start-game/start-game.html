@@ -1,0 +1,21 @@
+@if(message != "") {
+
+    <h1 class="red zoom-effect">{{message}}</h1>
+
+}
+@else {
+
+    <main class="container">
+
+        @for(number of player.numbers; track $index) {
+
+            @if($index == 0) {
+                <div class="card zoom colorful click" (click)="deleteNumber(number)">{{number}}</div>
+            }
+            @else {
+                <div class="card colorful">{{number}}</div>
+            }
+        }
+
+    </main>
+}

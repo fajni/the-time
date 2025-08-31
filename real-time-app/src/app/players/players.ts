@@ -2,11 +2,13 @@ import { Component, DestroyRef, ElementRef, EventEmitter, inject, OnInit, Output
 import { IPlayer } from '../models/IPlayer';
 import { PlayerService } from '../services/player.service';
 import { BrowserService } from '../services/browser.service';
-import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { NumberService } from '../services/numbers.service';
+import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-players',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './players.html',
   styleUrl: './players.css'
 })
@@ -14,11 +16,11 @@ export class Players implements OnInit {
 
   private playerService = inject(PlayerService);
   private browserService = inject(BrowserService);
-  private route = inject(Router);
+  private numberService = inject(NumberService);
+  private gameService = inject(GameService);
   private destroyRef = inject(DestroyRef);
 
   public players: IPlayer[] = [];
-  public message: string = "";
 
 
   public async ngOnInit() {
@@ -27,14 +29,12 @@ export class Players implements OnInit {
 
     /////
 
+    await this.gameService.setLoser('');
+    await this.numberService.clearDeletedNumbers();
+
     const sub = this.playerService.listenPlayers().subscribe((response) => {
 
       this.players = response;
-
-      if(this.players.length < 1) {
-        this.message = "Not enough players!";
-        this.players = [];
-      }
 
     });
 
@@ -52,9 +52,10 @@ export class Players implements OnInit {
       this.browserService.setBrowserId(player.id);
 
       this.playerService.setLoginForPlayer(player!.id, true);
-    }
 
-    console.log(player);
+      const numbers = this.numberService.getRandomInts(0, 10, 3);
+      this.playerService.setNumbersForPlayer(player.id, numbers);
+    }
 
   }
 
