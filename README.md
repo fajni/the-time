@@ -1,4 +1,4 @@
-# The Mind
+# The Time
 
 <p align="center">
 <img src="./images/animal.png" width="20%">
