@@ -2,7 +2,6 @@ import { inject, Injectable } from "@angular/core";
 import { child, Database, get, onValue, ref, set, update } from "@angular/fire/database";
 import { Observable } from "rxjs";
 import { IPlayer } from "../models/IPlayer";
-import { numbers } from "../../assets/data/numbers";
 
 @Injectable({ providedIn: 'root' })
 export class PlayerService {

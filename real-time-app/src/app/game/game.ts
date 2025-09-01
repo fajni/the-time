@@ -58,6 +58,8 @@ export class Game implements OnInit {
 
     const notAllLoggedInSubscription = this.playerService.listenPlayers().subscribe(async (response) => {
 
+      console.log(response.length);
+
       this.notLoggedInPlayers = [];
       this.loggedInPlayers = [];
       this.countdown = 5;
@@ -101,10 +103,8 @@ export class Game implements OnInit {
       }
 
       /*  IF PLAYER LOG OUT SAME NUMBERS STAYS THE SAME (PLAYER CAN START THE GAME WITH 1 NUMBER!) 
-          REINITIALIZE NUMBERS! */
+      REINITIALIZE NUMBERS! */
 
-      // SET LENGTH OR CHANGE NUMBER OF USERS IN DATABASE !!!
-      // this.loggedInPlayers.length == response.length
       if(this.loggedInPlayers.length == response.length) {
         
         this.startGame = true;

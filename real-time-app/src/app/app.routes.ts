@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { App } from './app';
 import { About } from './about/about';
 import { Players } from './players/players';
 import { Game } from './game/game';
 import { Player } from './players/player/player';
+import { Navbar } from './navbar/navbar';
 
 export const routes: Routes = [
     {

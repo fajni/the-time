@@ -9,6 +9,12 @@ h1 {
     padding: 10px;
 }
 
+p {
+    text-align: center;
+    font-weight: 500;
+    font-size: large;
+}
+
 .container {
     display: flex;
     gap: 16px;
@@ -36,6 +42,23 @@ h1 {
 .card:hover {
     border: 2px solid purple;
     color: white;
+}
+
+.btn-again {
+
+    margin: auto auto;
+    display: block;
+    padding: 10px;
+    border: 2px solid plum;
+    background-color: rgba(128, 0, 128, 0.4);
+    border-radius: 10px;
+    font-size: larger;
+    font-weight: 700;
+}
+
+.btn-again:hover {
+    cursor: pointer;
+    background-color: rgba(128, 0, 128, 0.9);
 }
 
 .click {

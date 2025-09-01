@@ -4,6 +4,7 @@ import { PlayerService } from '../../services/player.service';
 import { NumberService } from '../../services/numbers.service';
 import { GameService } from '../../services/game.service';
 import { Database, onValue, ref } from '@angular/fire/database';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-start-game',
@@ -16,6 +17,7 @@ export class StartGame implements OnInit {
   private playerService = inject(PlayerService);
   private numberService = inject(NumberService);
   private gameService = inject(GameService);
+  private router = inject(Router);
 
   private db = inject(Database);
 
@@ -46,7 +48,6 @@ export class StartGame implements OnInit {
     const response: boolean = await this.numberService.deleteNumberForPlayerWithChecks(this.player.id, n);
 
     if(response == false) {
-      this.message = 'YOU LOST!';
       this.gameService.setLoser(this.player.title);
       this.gameService.setGameStatus(false);
       this.numberService.clearDeletedNumbers();
@@ -56,6 +57,16 @@ export class StartGame implements OnInit {
       this.playerService.deleteNumberForPlayer(this.player.id, n);
     }
 
+    if(this.player.numbers == null) {
+      this.message = "VICTORY!";
+    }
+
+  }
+
+  public startAgain() {
+    
+    this.router.navigate(['/players']);
+    location.reload();
   }
 
 }

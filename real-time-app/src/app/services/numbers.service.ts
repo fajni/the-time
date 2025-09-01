@@ -55,7 +55,7 @@ export class NumberService {
 
     public async deleteNumberForPlayerWithChecks(id: number, number: number) {
 
-        const playerNumbersRef = ref(this.db, `player/player${id}/numbers`);
+        const playerNumbersRef = ref(this.db, `players/player${id}/numbers`);
         const deletedNumbersRef = ref(this.db, `deletedNumbers`);
 
         const playerNumbersSnapshow = await get(playerNumbersRef);
@@ -63,7 +63,7 @@ export class NumberService {
 
         const playerNumbers: number[] = playerNumbersSnapshow.val();
         const deletedNumbers: number[] = deletedNumbersSnapshot.val();
-        
+
         if (deletedNumbers.length > 0) {
 
             const lastDeleted = deletedNumbers[deletedNumbers.length - 1];
@@ -75,7 +75,7 @@ export class NumberService {
             }
         }
 
-        const updatedPlayerNumbers = numbers.filter(n => n !== number);
+        const updatedPlayerNumbers = playerNumbers.filter(n => n !== number);
 
         const updatedDeletedNumbers = [...deletedNumbers, number];
 

@@ -2,6 +2,7 @@
 
 Some of my notes during the development. Problems, solutions, hosting, deploying, etc.
 
+- [About](#about)
 - [Development](#development)
     - [root (_app_)](#root-app)
     - [Components](#components)
@@ -13,6 +14,17 @@ Some of my notes during the development. Problems, solutions, hosting, deploying
     - [Can't send/change data while listening to the same node in realtime](#cant-sendchange-data-while-listening-to-the-same-node-in-realtime)
 - [Hosting](#hosting)
 
+
+## About
+
+### Select Player
+
+- localstorage as login ....
+
+### Player's Numbers
+
+- how are numbers generated
+- ...
 
 ## Development
 
